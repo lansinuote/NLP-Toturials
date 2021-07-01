@@ -18,35 +18,7 @@ def mask_x(x):
     return mask
 
 
-def mask_y_fast(y):
-    # 上三角矩阵,[11, 11]
-    '''
-    [[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]'''
-    triangle = torch.triu(torch.ones((11, 11), dtype=torch.long), diagonal=1)
-
-    # 判断每个词是不是<PAD>
-    # [b, 11]
-    y_eq_pad = y == data.zidian['<PAD>']
-
-    # 每个y每个词是否等于pad,组合全1的矩阵和triangle矩阵
-    mask = torch.where(y_eq_pad.reshape(-1, 1, 11), torch.ones(1, 11, 11, dtype=torch.long),
-                       triangle.reshape(1, 11, 11))
-
-    return mask.bool().reshape(-1, 1, 11, 11)
-
-
 def mask_y(y):
-    return mask_y_fast(y)
     # b句话,每句话11个词,这里是还没embed的
     # y = [b, 11]
 
@@ -77,6 +49,4 @@ def mask_y(y):
 
 if __name__ == '__main__':
     print(mask_x(data.get_sample()[0]).shape)
-    y1 = mask_y(data.get_sample()[1][:, :-1])
-    y2 = mask_y_fast(data.get_sample()[1][:, :-1])
-    print(torch.all(y1 == y2))
+    print(mask_y(data.get_sample()[1][:, :-1]).shape)
