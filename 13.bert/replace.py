@@ -11,9 +11,6 @@ def random_replace(x):
     # 替换矩阵,形状和x一样,被替换过的位置是True,其他位置是False
     replace = x == -1
 
-    # 分概率做不同的操作
-    p = random.random()
-
     # 遍历所有的字
     for i in range(len(x)):
         for j in range(len(x[i])):
@@ -29,6 +26,9 @@ def random_replace(x):
 
             # 被操作过的位置标记下,这里的操作包括什么也不做
             replace[i, j] = True
+
+            # 分概率做不同的操作
+            p = random.random()
 
             # 0.7的概率替换为mask
             if p < 0.7:

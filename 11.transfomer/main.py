@@ -11,7 +11,8 @@ import position
 class Transformer(nn.Module):
     def __init__(self):
         super().__init__()
-        self.embed = position.PositionEmbedding()
+        self.embed_x = position.PositionEmbedding()
+        self.embed_y = position.PositionEmbedding()
         self.encoder = encode.Encoder()
         self.decoder = decode.Decoder()
         self.fc_out = nn.Linear(32, 27)
@@ -24,7 +25,7 @@ class Transformer(nn.Module):
         # 编码,添加位置信息
         # x = [b, 11] -> [b, 11, 32]
         # y = [b, 11] -> [b, 11, 32]
-        x, y = self.embed(x), self.embed(y)
+        x, y = self.embed_x(x), self.embed_y(y)
 
         # 编码层计算
         # [b, 11, 32] -> [b, 11, 32]
@@ -56,7 +57,7 @@ def predict(x):
 
     # x编码,添加位置信息
     # [b, 11] -> [b, 11, 32]
-    x = model.embed(x)
+    x = model.embed_x(x)
 
     # 编码层计算,维度不变
     # [b, 11, 32] -> [b, 11, 32]
@@ -74,7 +75,7 @@ def predict(x):
 
         # y编码,添加位置信息
         # [b, 11] -> [b, 11, 32]
-        y = model.embed(y)
+        y = model.embed_y(y)
 
         # 解码层计算,维度不变
         # [b, 11, 32],[b, 11, 32] -> [b, 11, 32]
