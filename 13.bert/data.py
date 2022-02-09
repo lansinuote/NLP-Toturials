@@ -41,10 +41,10 @@ def to_tensor(data):
         s2 = s2.split(',')[:28] + [zidian['<EOS>']]
         x = s1 + s2
 
-        # 在前面补0到统一长度
-        x = x[::-1] + [zidian['<PAD>']] * 60
+        # 补0到统一长度
+        x = x + [zidian['<PAD>']] * 60
         x = x[:60]
-        x = x[::-1]
+        # x = x[::-1]
 
         xs[i] = x
 

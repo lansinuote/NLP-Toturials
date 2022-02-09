@@ -22,7 +22,7 @@ attn_mask = torch.triu(torch.ones((60, 60), dtype=torch.long), diagonal=1)
 attn_mask = attn_mask == 1
 
 # 避免某些版本的pytorch会计算出nan的结果.
-attn_mask = None
+# attn_mask = None
 
 if __name__ == '__main__':
     print(attn_mask)
